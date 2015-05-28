@@ -41,7 +41,7 @@
                     filterExpression: "=?",
                     filterComparator: "=?"
                 },
-                controller: ['$scope', function( $scope ) {
+                controller: ['$scope', '$timeout', function( $scope, $timeout ) {
 
                     $scope.visibleNodes = [];
                     $scope.nodeIdMap = {};
@@ -49,30 +49,42 @@
                     if($scope.bindFunctionsTo) {
                         $scope.bindFunctionsTo = {
                             selectFirst: function() {
-                                if($scope.selectedIndex() === 0) return;
-                                $scope.selectNodeLabel($scope.visibleNodes[0]);
+                                $timeout(function () {
+                                    if($scope.selectedIndex() === 0) return;
+                                    $scope.selectNodeLabel($scope.visibleNodes[0]);
+                                }, 0);
                             },
                             selectPrevious: function() {
-                                if($scope.selectedIndex() === 0) return;
-                                $scope.selectNodeLabel($scope.visibleNodes[$scope.selectedIndex()-1]);
+                                $timeout(function () {
+                                    if($scope.selectedIndex() === 0) return;
+                                    $scope.selectNodeLabel($scope.visibleNodes[$scope.selectedIndex()-1]);
+                                }, 0);
                             },
                             selectNext: function() {
-                                if($scope.selectedIndex() === $scope.visibleNodes.length-1) return;
-                                $scope.selectNodeLabel($scope.visibleNodes[$scope.selectedIndex()+1]);
+                                $timeout(function () {
+                                    if($scope.selectedIndex() === $scope.visibleNodes.length-1) return;
+                                    $scope.selectNodeLabel($scope.visibleNodes[$scope.selectedIndex()+1]);
+                                }, 0);
                             },
                             selectLast: function() {
-                                if($scope.selectedIndex() === $scope.visibleNodes.length-1) return;
-                                $scope.selectNodeLabel($scope.visibleNodes[$scope.visibleNodes.length-1]);
+                                $timeout(function () {
+                                    if($scope.selectedIndex() === $scope.visibleNodes.length-1) return;
+                                    $scope.selectNodeLabel($scope.visibleNodes[$scope.visibleNodes.length-1]);
+                                }, 0);
                             },
                             expandNode: function() {
-                                var nodeObj = {$id: $scope.nodeIdMap[$scope.selectedNode.id], node: $scope.selectedNode};
-                                if(!$scope.selectedNode || $scope.nodeExpanded.call(nodeObj)) return;
-                                $scope.selectNodeHead.call(nodeObj);
+                                $timeout(function () {
+                                    var nodeObj = {$id: $scope.nodeIdMap[$scope.selectedNode.id], node: $scope.selectedNode};
+                                    if(!$scope.selectedNode || $scope.nodeExpanded.call(nodeObj)) return;
+                                    $scope.selectNodeHead.call(nodeObj);
+                                }, 0);
                             },
                             collapseNode: function() {
-                                var nodeObj = {$id: $scope.nodeIdMap[$scope.selectedNode.id], node: $scope.selectedNode};
-                                if(!$scope.selectedNode || !$scope.nodeExpanded.call(nodeObj)) return;
-                                $scope.selectNodeHead.call(nodeObj);
+                                $timeout(function () {
+                                    var nodeObj = {$id: $scope.nodeIdMap[$scope.selectedNode.id], node: $scope.selectedNode};
+                                    if(!$scope.selectedNode || !$scope.nodeExpanded.call(nodeObj)) return;
+                                    $scope.selectNodeHead.call(nodeObj);
+                                }, 0);
                             }
                         };
                     }
