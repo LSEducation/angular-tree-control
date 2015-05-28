@@ -185,7 +185,6 @@
                     };
 
                     $scope.selectNodeHead = function() {
-                        console.log('called', this, $scope.expandedNodesMap);
                         var expanding = $scope.expandedNodesMap[this.$id] === undefined;
                         $scope.expandedNodesMap[this.$id] = (expanding ? this.node : undefined);
                         if (expanding) {
@@ -349,7 +348,6 @@
                 link: function(scope, element, attrs, controller) {
 
                     scope.$parent.nodeIdMap[scope.node.id] = scope.$id;
-                    console.log(scope.$parent.nodeIdMap);
 
                     if (!scope.options.isLeaf(scope.node)) {
                         angular.forEach(scope.expandedNodesMap, function (node, id) {
@@ -399,7 +397,6 @@
                     } else {
                         scope.$parent.visibleNodes.push(scope.node);
                     }
-                    console.log(scope.node.id, scope.$id)
                 }
             }
         });
