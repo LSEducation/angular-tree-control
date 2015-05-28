@@ -382,7 +382,7 @@
 
                     var parentIndex = scope.$parent.visibleNodes.indexOf(scope.$parent.node);
                     if(parentIndex !== -1) {
-                        var myIndex = 1 + scope.transcludeScope.$parentNode.children.indexOf(scope.node);
+                        var myIndex = 1 + scope.transcludeScope.$parentNode[scope.$parent.options.nodeChildren].indexOf(scope.node);
                         scope.$parent.visibleNodes.splice(parentIndex+myIndex, 0, scope.node);
                     } else {
                         scope.$parent.visibleNodes.push(scope.node);
