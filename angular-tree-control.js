@@ -46,49 +46,6 @@
                     $scope.visibleNodes = [];
                     $scope.nodeIdMap = {};
 
-                    if($scope.bindFunctionsTo) {
-                        $scope.bindFunctionsTo = {
-                            selectFirst: function() {
-                                $timeout(function () {
-                                    if($scope.selectedIndex() === 0) return;
-                                    $scope.selectNodeLabel($scope.visibleNodes[0]);
-                                }, 0);
-                            },
-                            selectPrevious: function() {
-                                $timeout(function () {
-                                    if($scope.selectedIndex() === 0) return;
-                                    $scope.selectNodeLabel($scope.visibleNodes[$scope.selectedIndex()-1]);
-                                }, 0);
-                            },
-                            selectNext: function() {
-                                $timeout(function () {
-                                    if($scope.selectedIndex() === $scope.visibleNodes.length-1) return;
-                                    $scope.selectNodeLabel($scope.visibleNodes[$scope.selectedIndex()+1]);
-                                }, 0);
-                            },
-                            selectLast: function() {
-                                $timeout(function () {
-                                    if($scope.selectedIndex() === $scope.visibleNodes.length-1) return;
-                                    $scope.selectNodeLabel($scope.visibleNodes[$scope.visibleNodes.length-1]);
-                                }, 0);
-                            },
-                            expandNode: function() {
-                                $timeout(function () {
-                                    var nodeObj = {$id: $scope.nodeIdMap[$scope.selectedNode.id], node: $scope.selectedNode};
-                                    if(!$scope.selectedNode || $scope.nodeExpanded.call(nodeObj)) return;
-                                    $scope.selectNodeHead.call(nodeObj);
-                                }, 0);
-                            },
-                            collapseNode: function() {
-                                $timeout(function () {
-                                    var nodeObj = {$id: $scope.nodeIdMap[$scope.selectedNode.id], node: $scope.selectedNode};
-                                    if(!$scope.selectedNode || !$scope.nodeExpanded.call(nodeObj)) return;
-                                    $scope.selectNodeHead.call(nodeObj);
-                                }, 0);
-                            }
-                        };
-                    }
-
                     function defaultIsLeaf(node) {
                         return !node[$scope.options.nodeChildren] || node[$scope.options.nodeChildren].length === 0;
                     }
@@ -146,6 +103,66 @@
                     }
                     $scope.parentScopeOfTree = $scope.$parent;
 
+                    if($scope.bindFunctionsTo) {
+                        $scope.bindFunctionsTo = {
+                            selectFirst: function() {
+                                $timeout(function () {
+                                    if($scope.selectedIndex() === 0) return;
+                                    $scope.selectNodeLabel($scope.visibleNodes[0]);
+                                }, 0);
+                            },
+                            selectPrevious: function() {
+                                $timeout(function () {
+                                    if($scope.selectedIndex() === 0) return;
+                                    $scope.selectNodeLabel($scope.visibleNodes[$scope.selectedIndex()-1]);
+                                }, 0);
+                            },
+                            selectNext: function() {
+                                $timeout(function () {
+                                    if($scope.selectedIndex() === $scope.visibleNodes.length-1) return;
+                                    $scope.selectNodeLabel($scope.visibleNodes[$scope.selectedIndex()+1]);
+                                }, 0);
+                            },
+                            selectLast: function() {
+                                $timeout(function () {
+                                    if($scope.selectedIndex() === $scope.visibleNodes.length-1) return;
+                                    $scope.selectNodeLabel($scope.visibleNodes[$scope.visibleNodes.length-1]);
+                                }, 0);
+                            },
+                            expandNode: function() {
+                                $timeout(function () {
+                                    var nodeObj = {$id: $scope.nodeIdMap[$scope.selectedNode.id], node: $scope.selectedNode};
+                                    if(!$scope.selectedNode || $scope.nodeExpanded.call(nodeObj)) return;
+                                    $scope.selectNodeHead.call(nodeObj);
+                                }, 0);
+                            },
+                            collapseNode: function() {
+                                $timeout(function () {
+                                    var nodeObj = {$id: $scope.nodeIdMap[$scope.selectedNode.id], node: $scope.selectedNode};
+                                    if(!$scope.selectedNode || !$scope.nodeExpanded.call(nodeObj)) return;
+                                    $scope.selectNodeHead.call(nodeObj);
+                                }, 0);
+                            },
+                            getParentNode: function () {
+                                if(!$scope.selectedNode || $scope.selectedIndex() === 0) return;
+                                var parentNode = null;
+                                for (var i = 0; i < $scope.visibleNodes.length; i++) {
+                                    if (parentNode) break;
+                                    var node = $scope.visibleNodes[i];
+                                    var children = node[$scope.options.nodeChildren];
+                                    if (!angular.isDefined(children)) continue;
+
+                                    for (var j = 0; j < children.length; j++) {
+                                        if ($scope.options.equality($scope.selectedNode, children[j])) {
+                                            parentNode = node;
+                                            break;
+                                        }
+                                    }
+                                }
+                                return parentNode;
+                            }
+                        };
+                    }
 
                     function isSelectedNode(node) {
                         if (!$scope.options.multiSelection && ($scope.options.equality(node, $scope.selectedNode)))
