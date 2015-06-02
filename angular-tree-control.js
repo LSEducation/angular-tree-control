@@ -343,7 +343,7 @@
                 }
             }
         })
-        .directive("treeTransclude", function() {
+        .directive("treeTransclude", ['$filter', function($filter) {
             return {
                 link: function(scope, element, attrs, controller) {
 
@@ -392,12 +392,19 @@
 
                     var parentIndex = scope.$parent.visibleNodes.indexOf(scope.$parent.node);
                     if(parentIndex !== -1) {
-                        var myIndex = 1 + scope.transcludeScope.$parentNode[scope.$parent.options.nodeChildren].indexOf(scope.node);
+                        var children =  scope.transcludeScope.$parentNode[scope.$parent.options.nodeChildren];
+                        if (scope.filterExpression) {
+                            children = $filter('filter')(children, scope.filterExpression, scope.filterComparator);
+                        }
+                        if (scope.orderBy) {
+                            children = $filter('orderBy')(children, scope.orderBy, scope.reverseOrder);
+                        }
+                        var myIndex = 1 + children.indexOf(scope.node);
                         scope.$parent.visibleNodes.splice(parentIndex+myIndex, 0, scope.node);
                     } else {
                         scope.$parent.visibleNodes.push(scope.node);
                     }
                 }
             }
-        });
+        }]);
 })( angular );
