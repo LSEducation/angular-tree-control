@@ -143,18 +143,20 @@
                                     $scope.selectNodeHead.call(nodeObj);
                                 }, 0);
                             },
-                            getParentNode: function () {
-                                if(!$scope.selectedNode || $scope.selectedIndex() === 0) return;
+                            getParentNode: function (node) {
+                                if (!node && (!$scope.selectedNode || $scope.selectedIndex() === 0)) return;
+                                node = node || $scope.selectedNode;
+
                                 var parentNode = null;
                                 for (var i = 0; i < $scope.visibleNodes.length; i++) {
                                     if (parentNode) break;
-                                    var node = $scope.visibleNodes[i];
-                                    var children = node[$scope.options.nodeChildren];
+                                    var visibleNode = $scope.visibleNodes[i];
+                                    var children = visibleNode[$scope.options.nodeChildren];
                                     if (!angular.isDefined(children)) continue;
 
                                     for (var j = 0; j < children.length; j++) {
-                                        if ($scope.options.equality($scope.selectedNode, children[j])) {
-                                            parentNode = node;
+                                        if ($scope.options.equality(node, children[j])) {
+                                            parentNode = visibleNode;
                                             break;
                                         }
                                     }
