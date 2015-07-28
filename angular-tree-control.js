@@ -83,6 +83,10 @@
                         return true;
                     }
 
+                    function defaultDirToggleable(){
+                        return true;
+                    }
+
                     $scope.options = $scope.options || {};
                     ensureDefault($scope.options, "multiSelection", false);
                     ensureDefault($scope.options, "nodeChildren", "children");
@@ -98,6 +102,7 @@
                     ensureDefault($scope.options.injectClasses, "labelSelected", "");
                     ensureDefault($scope.options, "equality", defaultEquality);
                     ensureDefault($scope.options, "isLeaf", defaultIsLeaf);
+                    ensureDefault($scope.options, "dirToggleable", defaultDirToggleable);
                     ensureDefault($scope.options, "allowDeselect", true);
                     ensureDefault($scope.options, "isSelectable", defaultIsSelectable);
                   
@@ -212,6 +217,9 @@
                     $scope.selectNodeHead = function() {
                         var transcludedScope = this;
                         var expanding = $scope.expandedNodesMap[transcludedScope.$id] === undefined;
+                        if(!$scope.options.dirToggleable(this.node, expanding)) {
+                            return;
+                        }
                         $scope.expandedNodesMap[transcludedScope.$id] = (expanding ? transcludedScope.node : undefined);
                         if (expanding) {
                             $scope.expandedNodes.push(transcludedScope.node);
