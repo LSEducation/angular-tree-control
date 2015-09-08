@@ -95,6 +95,7 @@
                     ensureDefault($scope.options.injectClasses, "ul", "");
                     ensureDefault($scope.options.injectClasses, "li", "");
                     ensureDefault($scope.options.injectClasses, "liSelected", "");
+                    ensureDefault($scope.options.injectClasses, "liWithChildBranch", "has-child-branch");
                     ensureDefault($scope.options.injectClasses, "iExpanded", "");
                     ensureDefault($scope.options.injectClasses, "iCollapsed", "");
                     ensureDefault($scope.options.injectClasses, "iLeaf", "");
@@ -190,11 +191,28 @@
                         }
                     }
 
+                    function hasChildBranch(node) {
+                        var children = node[$scope.options.nodeChildren];
+                        if (children) {
+                            for (var i = 0; i < children.length; i++) {
+                                var child = children[i];
+                                if (!$scope.options.isLeaf(child)) {
+                                    return true;
+                                }
+                            }
+                        }
+                        return false;
+                    }
+
                     $scope.headClass = function(node) {
-                        var liSelectionClass = classIfDefined($scope.options.injectClasses.liSelected, false);
+                        var liSelectionClass = classIfDefined($scope.options.injectClasses.liSelected);
+                        var liWithChildBranchClass = classIfDefined($scope.options.injectClasses.liWithChildBranch);
                         var injectSelectionClass = "";
                         if (liSelectionClass && isSelectedNode(node))
                             injectSelectionClass = " " + liSelectionClass;
+                        if (liWithChildBranchClass && hasChildBranch(node)) {
+                            injectSelectionClass = " " + liWithChildBranchClass;
+                        }
                         if ($scope.options.isLeaf(node))
                             return "tree-leaf" + injectSelectionClass;
                         if ($scope.expandedNodesMap[this.$id])
