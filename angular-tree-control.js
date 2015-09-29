@@ -36,7 +36,7 @@
                     onNodeToggle: "&",
                     bindFunctionsTo: "=?",
                     options: "=?",
-                    orderBy: "@",
+                    orderBy: "=?",
                     reverseOrder: "@",
                     filterExpression: "=?",
                     filterComparator: "=?"
@@ -339,7 +339,7 @@
                             '<i class="tree-branch-head" ng-class="iBranchClass()" ng-click="selectNodeHead(node)"></i>' +
                             '<i class="tree-leaf-head '+classIfDefined($scope.options.injectClasses.iLeaf, false)+'"></i>' +
                             '<div class="tree-label '+classIfDefined($scope.options.injectClasses.label, false)+'" ng-class="[selectedClass(), unselectableClass()]" ng-click="selectNodeLabel(node)" tree-transclude></div>' +
-                            '<treeitem ng-if="nodeExpanded()"></treeitem>' +
+                            '<treeitem ng-show="nodeExpanded()"></treeitem>' +
                             '</li>' +
                             '</ul>';
 
